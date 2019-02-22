@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 public class Conexao {
 
-	public static String status = "N„o conectou...";
+	public static String status = "N√£o conectou...";
 /*
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -17,23 +17,23 @@ public class Conexao {
 
 	}
 */
-	//Abre conex„o com o banco
+	//Abre conex√£o com o banco
 	public static java.sql.Connection getConexao() {
 		Connection connection = null; // atributo do tipo Connection
 		try {
-			// Carregando o JDBC Driver padr„o
-			String driverName = "";
+			// Carregando o JDBC Driver padr√£o
+			String driverName = "com.mysql.jdbc.Driver";
 			Class.forName(driverName);
-			// Configurando a nossa conex„o com um banco de dados//
-			String serverName = "";// ""; //caminho do servidor do BD
-			String mydatabase = "";// ""; //nome do seu banco de dados
+			// Configurando a nossa conex√£o com um banco de dados//
+			String serverName = "localhost";// ""; //caminho do servidor do BD
+			String mydatabase = "ebd";// ""; //nome do seu banco de dados
 			String url = "jdbc:mysql://" + serverName + ":3306/" + mydatabase + "?useSSL=true";
-			String username = "";// ""; //nome de um usu·rio de seu BD
+			String username = "root";// ""; //nome de um usu√°rio de seu BD
 			String password = "";// ""; //sua senha de acesso
 
 			connection = DriverManager.getConnection(url, username, password);
 
-			// Testa sua conex„o//
+			// Testa sua conex√£o//
 			if (connection != null) {
 				status = ("1");
 			} else {
@@ -41,18 +41,18 @@ public class Conexao {
 			}
 
 			return connection;
-		} catch (ClassNotFoundException e) { // Driver n„o encontrado
+		} catch (ClassNotFoundException e) { // Driver n√£o encontrado
 			System.out.println("O driver expecificado nao foi encontrado.");
 			return null;
 		} catch (SQLException e) {
-//N„o conseguindo se conectar ao banco	 
+//N√£o conseguindo se conectar ao banco	 
 			System.out.println("Nao foi possivel conectar ao Banco de Dados.");
 			return null;
 		}
 
 	}
 
-//MÈtodo que retorna o status da sua conex„o//
+//M√©todo que retorna o status da sua conex√£o//
 	public static String statusConection() {
 		return status;
 	}
@@ -65,11 +65,11 @@ public class Conexao {
 		return status;
 	}
 
-//MÈtodo que fecha conex„o
+//M√©todo que fecha conex√£o
 	public static boolean closeConexao() {
 		try {
 			Conexao.getConexao().close();
-			status = ("STATUS--->Conex„o fechada");
+			status = ("STATUS--->Conex√£o fechada");
 			return true;
 		} catch (SQLException e) {
 			status = ("STATUS--->Erro ao exibir status");
@@ -77,7 +77,7 @@ public class Conexao {
 		}
 	}
 
-	// MÈtodo que reinicia conex„o
+	// M√©todo que reinicia conex√£o
 	public static java.sql.Connection refreshConexao() {
 		closeConexao();
 		return Conexao.getConexao();
