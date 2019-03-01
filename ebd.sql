@@ -25,11 +25,11 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `alunos`
+-- Estrutura da tabela `aluno`
 --
 
-DROP TABLE IF EXISTS `alunos`;
-CREATE TABLE IF NOT EXISTS `alunos` (
+DROP TABLE IF EXISTS `aluno`;
+CREATE TABLE IF NOT EXISTS `aluno` (
   `codaluno` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(100) NOT NULL,
   `dtnasc` date DEFAULT NULL,
@@ -49,10 +49,10 @@ CREATE TABLE IF NOT EXISTS `alunos` (
 ) ENGINE=MyISAM AUTO_INCREMENT=597 DEFAULT CHARSET=latin1;
 
 --
--- Extraindo dados da tabela `alunos`
+-- Extraindo dados da tabela `aluno`
 --
 
-INSERT INTO `alunos` (`codaluno`, `nome`, `dtnasc`, `telefone`, `sexo`, `codclasse`, `codclassesugestao`, `professor`, `especial`, `batismo`, `email`, `inativo`, `obs`) VALUES
+INSERT INTO `aluno` (`codaluno`, `nome`, `dtnasc`, `telefone`, `sexo`, `codclasse`, `codclassesugestao`, `professor`, `especial`, `batismo`, `email`, `inativo`, `obs`) VALUES
 (1, 'Helloá Tayla Lessa Ferreira', '1991-07-06', '97143-4640', 'Mulher', 2, 0, 'True', 'False', 'True', 'sem e-mail', 'False', ''),
 (2, 'Alícia Reboredo Pires', '2013-06-13', '98814-8306', 'Mulher', 1, 0, 'False', 'False', 'False', '', 'False', ''),
 (3, 'Ana Clara Campos de Marins', '2012-08-24', '     -', 'Mulher', 2, 2, 'False', 'True', 'False', '', 'False', ''),
@@ -496,7 +496,7 @@ INSERT INTO `alunos` (`codaluno`, `nome`, `dtnasc`, `telefone`, `sexo`, `codclas
 (481, 'Rosiane Mello Cardoso de Souza', '2016-01-01', '99847-7183', '', 15, 0, 'False', 'True', '', '', 'False', ''),
 (482, 'Sávio Peclat Coelho', '2016-01-01', '     -', 'Sexo', 1, 0, 'False', 'True', 'False', '', 'True', ''),
 (483, 'Simone Marins', '2016-01-01', '99977-2458', '', 15, 0, 'False', 'True', '', '', 'False', '');
-INSERT INTO `alunos` (`codaluno`, `nome`, `dtnasc`, `telefone`, `sexo`, `codclasse`, `codclassesugestao`, `professor`, `especial`, `batismo`, `email`, `inativo`, `obs`) VALUES
+INSERT INTO `aluno` (`codaluno`, `nome`, `dtnasc`, `telefone`, `sexo`, `codclasse`, `codclassesugestao`, `professor`, `especial`, `batismo`, `email`, `inativo`, `obs`) VALUES
 (485, 'Uanderson de Mesquita Passos', '2016-01-01', '99606-9547', 'Homem', 9, 0, 'False', 'True', 'False', '', 'False', ''),
 (486, 'Uedson Miranda de Marins', '2016-01-01', '99508-2308', 'Homem', 9, 0, 'False', 'True', 'True', '', 'False', ''),
 (487, 'Uelber Coelho Gomes', '2016-01-01', '98603-5546', '', 15, 0, 'False', 'True', '', '', 'False', ''),
@@ -1521,7 +1521,7 @@ DROP TABLE IF EXISTS `resumos`;
 CREATE TABLE IF NOT EXISTS `resumos` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_classes` int(11) NOT NULL,
-  `totalalunos` int(11) NOT NULL,
+  `totalaluno` int(11) NOT NULL,
   `presentes` int(11) NOT NULL,
   `ausentes` int(11) NOT NULL,
   `visitantes` varchar(30) NOT NULL,
@@ -1535,7 +1535,7 @@ CREATE TABLE IF NOT EXISTS `resumos` (
 -- Extraindo dados da tabela `resumos`
 --
 
-INSERT INTO `resumos` (`id`, `id_classes`, `totalalunos`, `presentes`, `ausentes`, `visitantes`, `ofertas`, `data`) VALUES
+INSERT INTO `resumos` (`id`, `id_classes`, `totalaluno`, `presentes`, `ausentes`, `visitantes`, `ofertas`, `data`) VALUES
 (66, 2, 13, 10, 3, '0', 4, '07/05/2017'),
 (67, 3, 19, 13, 6, '2', 5.5, '07/05/2017'),
 (68, 4, 14, 12, 2, '0', 10.6, '07/05/2017'),
@@ -1652,7 +1652,7 @@ DROP TABLE IF EXISTS `resumosdominical`;
 CREATE TABLE IF NOT EXISTS `resumosdominical` (
   `IDRESUMOD` int(11) NOT NULL AUTO_INCREMENT,
   `DATA` varchar(30) NOT NULL,
-  `TALUNOS` int(11) NOT NULL,
+  `Taluno` int(11) NOT NULL,
   `TPRESENTES` int(11) NOT NULL,
   `TAUSENTES` int(11) NOT NULL,
   `TVISITANTES` int(11) NOT NULL,
@@ -1665,7 +1665,7 @@ CREATE TABLE IF NOT EXISTS `resumosdominical` (
 -- Extraindo dados da tabela `resumosdominical`
 --
 
-INSERT INTO `resumosdominical` (`IDRESUMOD`, `DATA`, `TALUNOS`, `TPRESENTES`, `TAUSENTES`, `TVISITANTES`, `TOTAL`, `TOFERTAS`) VALUES
+INSERT INTO `resumosdominical` (`IDRESUMOD`, `DATA`, `Taluno`, `TPRESENTES`, `TAUSENTES`, `TVISITANTES`, `TOTAL`, `TOFERTAS`) VALUES
 (9, '07/05/2017', 434, 201, 233, 2, 436, '449'),
 (10, '14/05/2017', 868, 345, 523, 10, 878, '625,1'),
 (16, '09/07/2017', 378, 196, 190, 7, 385, '339,2'),
