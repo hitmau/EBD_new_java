@@ -14,7 +14,7 @@ public class Consulta {
 	public static String status = Conexao.status;
 	//public static int Istatus;
 	public static int pk = 0;
-
+/*
 	public static void main(String[] args) throws SQLException {
 		// Testes efetuados!!!
 		// conecta no banco.
@@ -32,10 +32,12 @@ public class Consulta {
 		////// System.out.println(ExibeData("1987-03-28"));
 		// Retorna data e hora atual do sistema
 		////System.out.println(datahora());
-		System.out.println(select(0, "aluno", "codaluno", "codaluno"));
-		System.out.println(select("Mauricio", "aluno", "nome", "nome"));
+		//System.out.println(select(291, "aluno", "codaluno", "codaluno"));
+	//selectlike("Mau", 0, "aluno", "nome", "codaluno");
+		//("Mauricio", "aluno", "nome", "nome"));
+		//DeletePk("aluno", 291);
 	}
-
+*/
 	public static String datahora() {
 		Date dataHoraAtual = new Date();
 		String data = new SimpleDateFormat("dd/MM/yyyy").format(dataHoraAtual);
@@ -97,24 +99,24 @@ public class Consulta {
 
 		Connection con = Conexao.getConexao();
 		java.sql.Statement acesso = con.createStatement();
-
+		String statusInt = "0";
 		try {
 			Conexao.getConexao();
 			String sql = "SELECT * FROM " + tabela + " where " + coluna + " = '" + busca + "';";
 			ResultSet res = acesso.executeQuery(sql);
 			while (res != null && res.next()) {
-				status = res.getString(retorno);
+				statusInt = res.getString(retorno);
 			}
-			if (status == "Não conectou...") {
-				status = "0";
+			if (statusInt == "0") {
+				statusInt = "0";
 			} else {
-				status = "1";
+				statusInt = "1";
 			}
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}
 
-		int i = Integer.parseInt(status);
+		int i = Integer.parseInt(statusInt);
 		return i;
 	}
 	
@@ -176,18 +178,17 @@ public class Consulta {
 
 	public static String DeletePk(String tabela, int pk) throws SQLException {
 		Connection con = Conexao.getConexao();
-		java.sql.Statement acesso = con.createStatement();
 		String status = "";
 		
 		try {
 			Conexao.getConexao();
-			String sql = "DELETE FROM " + tabela + " WHERE CODALUNO = " + pk;
+			String sql = "delete from " + tabela + " where codaluno = " + pk + ";";
 			PreparedStatement preparedSql = con.prepareStatement(sql);
-			preparedSql.setString(1, tabela);
-			preparedSql.setInt(2, pk);
+			//preparedSql.setString(1, tabela);
+			//preparedSql.setInt(2, pk);
 			preparedSql.execute();
-			status = "Código " + pk + " da tabela " + tabela + " deletado com sucesso!";
-			Conexao.closeConexao();
+			status = "ok";
+			con.close();
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 			status = "Erro ao teletar o registro!" + ex.getMessage();

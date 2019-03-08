@@ -19,7 +19,7 @@ public class Aluno {
 	private String obs;
 	private static int conf;
 	private String dtcadastro;
-	
+
 	public String getDtcadastro() {
 		return dtcadastro;
 	}
@@ -35,7 +35,7 @@ public class Aluno {
 	public void setConf(int conf) {
 		this.conf = conf;
 	}
-	
+
 	public String getObs() {
 		return obs;
 	}
@@ -48,7 +48,7 @@ public class Aluno {
 	private boolean inativo;
 	private boolean especial;
 	private boolean batismo;
-	
+
 	public boolean isBatismo() {
 		return batismo;
 	}
@@ -149,16 +149,16 @@ public class Aluno {
 
 	public static void selectNomeAlunol(String nome, Integer onde) throws SQLException {
 		Consulta.selectlike(nome, onde, "aluno", "nome", "nome");
-		//return nome;
+		// return nome;
 	}
-	
+
 	public static String selectNomeAluno(String nome) throws SQLException {
 		nome = Consulta.select(nome, "aluno", "nome", "nome");
 		return nome;
 	}
 
 //--------------------------------------------------//
-	
+
 	public static Aluno getLista(int id) throws SQLException {
 		// System.out.println(id);
 
@@ -186,6 +186,28 @@ public class Aluno {
 		return aluno;
 	}
 
+	public static void getListaTudo() throws SQLException {
+		// System.out.println(id);
+
+		PreparedStatement stmt = con.prepareStatement("SELECT * FROM aluno order by 1");
+		//stmt.setInt(1, id);
+		ResultSet rs = stmt.executeQuery();
+		while (rs.next()) {
+			System.out.println(rs.getString("codaluno") + " - " + rs.getString("nome") + " - " + rs.getString("dtnasc") + " - " + rs.getString("telefone") + " - " + rs.getString("email") + " - " + rs.getString("sexo") + " - " + rs.getBoolean("inativo"));
+			/*
+			classe.setIdadeIni(rs.getInt("idadeini"));
+			classe.setIdadeFim(rs.getInt("idadefim"));
+			classe.setEspecial(rs.getBoolean("especial"));
+			classe.setInativo(rs.getBoolean("inativo"));
+			classe.setCodCategoria(rs.getInt("codcategoria"));
+			classe.setDhcadastro(rs.getString("dtcadastro"));
+			*/
+		}
+		rs.close();
+		stmt.close();
+		//return classe;
+	}
+	
 	public static Integer insertAluno(String nome, String dtnasc, String telefone, String sexo, int codclasse,
 			int codclassesugestao, String professor, String alunoespecial, String batismo, String email, String inativo,
 			String obs) throws SQLException, ParseException {
@@ -211,19 +233,20 @@ public class Aluno {
 			preparedStmt.setString(12, inativo);
 			preparedStmt.setString(13, obs);
 			preparedStmt.setString(14, Consulta.datahora());
-			//Verifica se já existe
-			//Critério Nome e email iguais
-			//Ou data e email iguais
+			// Verifica se já existe
+			// Critério Nome e email iguais
+			// Ou data e email iguais
 			String n1 = Consulta.select(nome, "aluno", "nome", "nome");
 			String e1 = Consulta.select(email, "aluno", "email", "email");
 			String d1 = Consulta.select(email, "aluno", "email", "dtnasc");
 			String cod = Consulta.select(email, "aluno", "email", "codaluno");
 			String dh = Consulta.select(email, "aluno", "email", "dtcadastro");
-			
+
 			if (n1.equals(nome) && e1.equals(email)) {
 				System.out.println("Provavelmete o Aluno já exista! Código: " + cod + " cadastrado em " + dh + "!");
 			} else if (Consulta.ExibeData(d1).equals(dtnasc) && e1.equals(email)) {
-				System.out.println("Data de nascimento e email existentes! Código: " + cod + " cadastrado em " + dh + "!");
+				System.out.println(
+						"Data de nascimento e email existentes! Código: " + cod + " cadastrado em " + dh + "!");
 			} else {
 				// execute the preparedstatement
 				preparedStmt.execute();
@@ -234,7 +257,7 @@ public class Aluno {
 					conf = 0;
 				}
 			}
-			
+
 			Conexao.closeConexao();
 
 		} catch (SQLException ex) {
@@ -326,25 +349,51 @@ public class Aluno {
 		}
 	}
 
-	public static void Delete(int pk) throws SQLException {
-        /* (Consulta.select(pk, "aluno", "codaluno", "codaluno").isEmpty()) {
-        
-        }*/
-		Consulta.DeletePk("aluno", pk);
+	public static int Delete(int pk) throws SQLException {
+		String ret, sex, restor;
+		int statusDel = 0;
+		if (Consulta.select(pk, "aluno", "codaluno", "codaluno") == 0) {
+			ret = "Chave não encontrada!";
+			System.out.println("Chave não encontrada!");
+		} else {
+			ret = getLista(pk).nome;
+			sex = getLista(pk).sexo;
+			restor = Consulta.DeletePk("aluno", pk);
+			if (restor.equals("ok")) {
+				statusDel = 1;
+			} else {
+				statusDel = 0;
+			}
+			if (sex.equals("Homem")) {
+				System.out.println("Usuário " + ret + " excluído com sucesso!");
+			} else if (sex.equals("Mulher")) {
+				System.out.println("Usuária " + ret + " excluída com sucesso!");
+			} else {
+				System.out.println("Usuário(a) " + ret + " excluído(a) com sucesso!");
+			}
+		}
+		return statusDel;
 	}
-	
+
 	public static void main(String[] args) throws SQLException, ParseException {
-		//inserir novo aluno----------------------
-		insertAluno("Luiz viannas", "01/01/1900", "900000000", "M", 1, 2, "N", "N", "N", "luiz.vianna@integrajca.com.br", "N","");
-		//-----------------------------------------
-		//Consulta usando nome com parametro de 0 like %% 1 %- e 2 -%
-		//selectNomeAlunol("Vian", 0);
-		//------------------------------------------------------------
-		//Lista um retorno pelo pk do aluno escolhendo sua coluna como no exemplo.
-		System.out.println(getLista(603).nome + " - " + getLista(603).email+ " - " + getLista(603).dtcadastro);
-		//------------------------------------------------------------
-		//Deleta registro de aluno
-		//Delete(603);
+		// inserir novo aluno----------------------
+		// insertAluno("Luiz viannas", "01/01/1900", "900000000", "M", 1, 2, "N", "N",
+		// "N", "luiz.vianna@integrajca.com.br", "N","");
+		// -----------------------------------------
+		// Consulta usando nome com parametro de 0 like %% 1 %- e 2 -%
+		// selectNomeAlunol("Vian", 0);
+		// ------------------------------------------------------------
+		// Lista um retorno pelo pk do aluno escolhendo sua coluna como no exemplo.
+		// System.out.println(getLista(603).nome + " - " + getLista(603).email+ " - " +
+		// getLista(603).dtcadastro);
+		// ------------------------------------------------------------
+		// Deleta registro de aluno
+		// System.out.println(Consulta.select(291, "aluno", "codaluno", "codaluno"));
+
+		//Consulta.selectlike("mar", 0, "aluno", "nome", "codaluno");
+		//Delete(55);
+Aluno.getListaTudo();
+		// System.out.println(Consulta.select(0, "aluno", "codaluno", "codaluno"));
 		// System.out.println(selectAluno("teste"));
 		// System.out.println(Consulta.pk("classes", "codclasses"));
 		// PK da tabela
@@ -357,24 +406,24 @@ public class Aluno {
 		// kasdklfjasçldfk asdl fj kasjd flasd kfla sjdf");
 		// System.out.println(selectAluno("teste"));
 		// System.out.println(selectAluno("Ma"));
-		 //System.out.println(Consulta.select("Mauricio Rodrigues", "aluno", "nome",
-		 //"codaluno"));
-		 //System.out.println(Consulta.select("441", "aluno", "codaluno", "nome"));
-		 //Aluno.insertAluno("Bruno Xavier", "24/01/1987", "21934875478", "M", 3, 3,
-		 //"S", "N", "S", "bruno@gmail.com", "N", "sem obs");
-		 //updateAluno("597", "Mauricinho Rodrigues", "26/02/2014", null, null, "2",
-		 //"2", "S", null, null, "S", "S", "agora tem obs");
-		 //updateAluno("Maumau", "28/03/1987", "21980317641", "M", "2", "1", "n", "n",
-		 //"n", "n", "n", "n", "441");
-		 //System.out.println(Consulta.select("441", "aluno", "codaluno", "nome"));
-		 //System.out.println(Consulta.select("597", "aluno", "codaluno", "obs"));
+		// System.out.println(Consulta.select("Mauricio Rodrigues", "aluno", "nome",
+		// "codaluno"));
+		// System.out.println(Consulta.select("441", "aluno", "codaluno", "nome"));
+		// Aluno.insertAluno("Bruno Xavier", "24/01/1987", "21934875478", "M", 3, 3,
+		// "S", "N", "S", "bruno@gmail.com", "N", "sem obs");
+		// updateAluno("597", "Mauricinho Rodrigues", "26/02/2014", null, null, "2",
+		// "2", "S", null, null, "S", "S", "agora tem obs");
+		// updateAluno("Maumau", "28/03/1987", "21980317641", "M", "2", "1", "n", "n",
+		// "n", "n", "n", "n", "441");
+		// System.out.println(Consulta.select("441", "aluno", "codaluno", "nome"));
+		// System.out.println(Consulta.select("597", "aluno", "codaluno", "obs"));
 
-		 //List<Aluno> teste = getLista(1);
-		 //List<Aluno> teste = getLista(1);
-		 //Aluno a1 = new Aluno();
-		 //System.out.println(getLista(441).toString());
-		
-		 //System.out.println(teste.);
+		// List<Aluno> teste = getLista(1);
+		// List<Aluno> teste = getLista(1);
+		// Aluno a1 = new Aluno();
+		// System.out.println(getLista(441).toString());
+
+		// System.out.println(teste.);
 
 	}
 
