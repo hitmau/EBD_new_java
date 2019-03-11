@@ -1,12 +1,12 @@
 package App;
 
-import java.sql.Array;
+//import java.sql.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
+//import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 public class Consulta {

@@ -16,6 +16,8 @@ public class Classe {
 	private int idadeFim = 0;
 	private boolean especial;
 	private boolean inativo;
+	private static String tabelaBd = "classe";
+	
 	public int getCodclasse() {
 		return codclasse;
 	}
@@ -59,18 +61,18 @@ public class Classe {
 		this.codCategoria = codCategoria;
 	}
 	public String getDhcadastro() {
-		return dhcadastro;
+		return dtcadastro;
 	}
-	public void setDhcadastro(String dhcadastro) {
-		this.dhcadastro = dhcadastro;
+	public void setDhcadastro(String dtcadastro) {
+		this.dtcadastro = dtcadastro;
 	}
 	private int codCategoria = 0;
-	private String dhcadastro;
+	private String dtcadastro;
 	
 	public static Classe getLista(int id) throws SQLException {
 		// System.out.println(id);
 
-		PreparedStatement stmt = con.prepareStatement("SELECT * FROM classes WHERE codclasse = ?");
+		PreparedStatement stmt = con.prepareStatement("SELECT * FROM " + tabelaBd + " WHERE codclasse = ?");
 		stmt.setInt(1, id);
 		ResultSet rs = stmt.executeQuery();
 		Classe classe = new Classe();
@@ -81,7 +83,7 @@ public class Classe {
 			classe.setEspecial(rs.getBoolean("especial"));
 			classe.setInativo(rs.getBoolean("inativo"));
 			classe.setCodCategoria(rs.getInt("codcategoria"));
-			classe.setDhcadastro(rs.getString("dhcadastro"));
+			classe.setDhcadastro(rs.getString("dtcadastro"));
 		}
 		rs.close();
 		stmt.close();
@@ -89,9 +91,7 @@ public class Classe {
 	}
 	
 	public static void getListaTudo() throws SQLException {
-		// System.out.println(id);
-
-		PreparedStatement stmt = con.prepareStatement("SELECT * FROM classes order by 1");
+		PreparedStatement stmt = con.prepareStatement("SELECT * FROM " + tabelaBd + " order by 1");
 		//stmt.setInt(1, id);
 		ResultSet rs = stmt.executeQuery();
 		while (rs.next()) {
@@ -115,12 +115,12 @@ public class Classe {
 		// Connection con = Conexao.getConexao();
 		try {
 
-			String query = " INSERT INTO classes (CODCLASSE, DESCRICAO, IDADEINI, IDADEFIM, ESPECIAL, INATIVO, CODCATEGORIA, DHCADASTRO)"
+			String query = " INSERT INTO " + tabelaBd + " (CODCLASSE, DESCRICAO, IDADEINI, IDADEFIM, ESPECIAL, INATIVO, CODCATEGORIA, DTCADASTRO)"
 					+ " values (?, ?, ?, ?, ?, ?, ?, ?)";
 
 			// create the mysql insert preparedstatement
 			PreparedStatement preparedStmt = con.prepareStatement(query);
-			preparedStmt.setInt(1, Consulta.PkMax("classes", "codclasse"));
+			preparedStmt.setInt(1, Consulta.PkMax(tabelaBd, "codclasse"));
 			preparedStmt.setString(2, Descricao);
 			preparedStmt.setInt(3, IdadeIni);
 			preparedStmt.setInt(4, IdadeFim);
@@ -131,21 +131,21 @@ public class Classe {
 			// Verifica se já existe
 			// Critério Nome e email iguais
 			// Ou data e email iguais
-			String n1 = Consulta.select(Descricao, "classes", "descricao", "descricao");
-			int e1 = Consulta.select(IdadeIni, "classes", "IdadeIni", "IdadeIni");
-			int d1 = Consulta.select(IdadeFim, "classes", "IdadeFim", "IdadeFim");
-			int cod = Consulta.select(codCategoria, "classes", "codclasse", "codclasse");
-			String dh = Consulta.select(Descricao, "classes", "descricao", "descricao");
+			String n1 = Consulta.select(Descricao, tabelaBd, "descricao", "descricao");
+			int e1 = Consulta.select(IdadeIni, tabelaBd, "IdadeIni", "IdadeIni");
+			int d1 = Consulta.select(IdadeFim, tabelaBd, "IdadeFim", "IdadeFim");
+			String cod = Consulta.select(Descricao, tabelaBd, "descricao", "codclasse");
+			String dh = Consulta.select(Descricao, tabelaBd, "descricao", "descricao");
 			 
 			if (n1.equals(Descricao)) {
-				System.out.println("Provavelmete a Classe já exista! Código: " + cod + " cadastrado em " + dh + "!");
+				System.out.println("Provavelmete a Classe já exista! Código: '" + cod + "' cadastrado em " + dh + "!");
 			} else if (e1 == IdadeIni && d1 == IdadeFim) {
 				System.out.println(
 						"Data de nascimento e email existentes! Código: " + cod + " cadastrado em " + dh + "!");
 			} else {
 				// execute the preparedstatement
 				preparedStmt.execute();
-				System.out.println("Nova Classe " + Descricao + " inserida com sucesso!");
+				System.out.println("Nova Classe '" + Descricao + "' inserida com sucesso!");
 				if (preparedStmt.getMoreResults() == false) {
 					conf = 1;
 				} else {
@@ -167,13 +167,13 @@ public class Classe {
 		Connection con = Conexao.getConexao();
 		String codclasse = String.valueOf(codClasse);
 		
-		String sql = "update classes set descricao = ?, idadeini = ?, idadefim = ?, especial = ?, inativo = ?, codcategoria = ? where codclasse = ?;";
+		String sql = "update " + tabelaBd + " set descricao = ?, idadeini = ?, idadefim = ?, especial = ?, inativo = ?, codcategoria = ? where codclasse = ?;";
 		try {
 
 			PreparedStatement stmt = con.prepareStatement(sql);
 
 			if (descricao == null) {
-				descricao = Consulta.select(codclasse, "classe", "descricao", "descricao");
+				descricao = Consulta.select(codclasse, tabelaBd, "descricao", "descricao");
 			}
 			stmt.setString(1, descricao);
 			stmt.setInt(2, idadeIni);
@@ -195,22 +195,22 @@ public class Classe {
 	public static void updateClasse(String descricao, int codClasse) {
 		Connection con = Conexao.getConexao();
 		String codclasse = String.valueOf(codClasse);
-		String sql = "update classes set descricao = ? where codclasse = ?;";
+		String sql = "update " + tabelaBd + " set descricao = ? where codclasse = ?;";
 		try {
 
 			PreparedStatement stmt = con.prepareStatement(sql);
 
 			if (descricao == null) {
-				descricao = Consulta.select(codclasse, "classes", "descricao", "descricao");
+				descricao = Consulta.select(codclasse, tabelaBd, "codclasse", "descricao");
 			}
 			stmt.setString(1, descricao);
 			stmt.setInt(2, codClasse);
-			String n1 = Consulta.select(codclasse, "classes", "descricao", "descricao");
+			String n1 = Consulta.select(codclasse, tabelaBd, "codclasse", "descricao");
 			// excutar
 			stmt.execute();
 			// fechar a conexao
 			// Conexao.closeConexao();
-			System.out.println("Update realizado! Nome antigo: " + n1 + ", nome novo: " + descricao + ".");
+			System.out.println("Update realizado! Nome antigo: '" + n1 + "', nome novo: '" + descricao + "'.");
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
@@ -219,13 +219,13 @@ public class Classe {
 	public static int Delete(int pk) throws SQLException {
 		String ret, restor;
 		int statusDel = 0;
-		if (Consulta.select(pk, "classe", "codclasse", "codclasse") == 0) {
+		if (Consulta.select(pk, tabelaBd, "codclasse", "codclasse") == 0) {
 			ret = "Chave não encontrada!";
 			System.out.println("Chave não encontrada!");
 		} else {
 			ret = getLista(pk).descricao;
 			//Deleta o registro da tabela e retorna 0 ou 1.
-			restor = Consulta.DeletePk("classe", pk);
+			restor = Consulta.DeletePk(tabelaBd, pk);
 			if (restor.equals("ok")) {
 				statusDel = 1;
 			} else {
@@ -241,9 +241,9 @@ public class Classe {
 		
 		//Classe.getListaTudo();
 		//System.out.println(Classe.getLista(9).getDescricao() + Classe.getLista(99).getIdadeIni());
-		//Classe.insertClasse("Jovens do Senhor", 18, 26, false, false, 17);
-		//System.out.println(Consulta.PkMax("classes", "codclasse"));
-		Classe.updateClasse("jovens de Jesuasasas", 18);
+		//Classe.insertClasse("Jovens velhos", 50, 80, false, false, 17);
+		//System.out.println(Consulta.PkMax(tabelaBd, "codclasse"));
+		//Classe.updateClasse("Cristo Vive!!!!", 18);
 	}
 
 }

@@ -33,7 +33,7 @@ public class Aluno {
 	}
 
 	public void setConf(int conf) {
-		this.conf = conf;
+		Aluno.conf = conf;
 	}
 
 	public String getObs() {
@@ -392,7 +392,7 @@ public class Aluno {
 
 		//Consulta.selectlike("mar", 0, "aluno", "nome", "codaluno");
 		//Delete(55);
-Aluno.getListaTudo();
+		//Aluno.getListaTudo();
 		// System.out.println(Consulta.select(0, "aluno", "codaluno", "codaluno"));
 		// System.out.println(selectAluno("teste"));
 		// System.out.println(Consulta.pk("classes", "codclasses"));
@@ -423,7 +423,7 @@ Aluno.getListaTudo();
 		// Aluno a1 = new Aluno();
 		// System.out.println(getLista(441).toString());
 
-		// System.out.println(teste.);
+		 //System.out.println("teste");
 
 	}
 

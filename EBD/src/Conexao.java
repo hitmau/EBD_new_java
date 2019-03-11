@@ -1,6 +1,3 @@
-package App;
-
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -28,11 +25,11 @@ public class Conexao {
 			String driverName = "com.mysql.jdbc.Driver";
 			Class.forName(driverName);
 			// Configurando a nossa conexão com um banco de dados//
-			String serverName = "localhost";// ""; //caminho do servidor do BD
-			String mydatabase = "ebd";// ""; //nome do seu banco de dados
+			String serverName = "sql9.freemysqlhosting.net";// "186.202.152.25"; //caminho do servidor do BD
+			String mydatabase = "sql9260135";// "alanmake_pw"; //nome do seu banco de dados
 			String url = "jdbc:mysql://" + serverName + ":3306/" + mydatabase + "?useSSL=true";
-			String username = "root";// ""; //nome de um usuário de seu BD
-			String password = "jebsweb";// ""; //sua senha de acesso
+			String username = "sql9260135";// "alanm_pw"; //nome de um usuário de seu BD
+			String password = "GJCVaqdCZy";// "7k6}P@JY"; //sua senha de acesso
 
 			connection = DriverManager.getConnection(url, username, password);
 
@@ -87,4 +84,3 @@ public class Conexao {
 	}
 
 }
-

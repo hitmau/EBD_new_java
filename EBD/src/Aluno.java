@@ -1,4 +1,3 @@
-package App;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,16 +16,7 @@ public class Aluno {
 	private String codclasse;
 	private String codclassesugestao;
 	private String obs;
-	private static int conf;
-	
-	public int getConf() {
-		return conf;
-	}
 
-	public void setConf(int conf) {
-		this.conf = conf;
-	}
-	
 	public String getObs() {
 		return obs;
 	}
@@ -138,17 +128,12 @@ public class Aluno {
 		this.professor = professor;
 	}
 
-	public static void selectNomeAlunol(String nome, Integer onde) throws SQLException {
-		Consulta.selectlike(nome, onde, "aluno", "nome", "nome");
-		//return nome;
-	}
-	
 	public static String selectNomeAluno(String nome) throws SQLException {
 		nome = Consulta.select(nome, "aluno", "nome", "nome");
 		return nome;
 	}
 
-//--------------------------------------------------//
+
 	
 	public static Aluno getLista(int id) throws SQLException {
 		// System.out.println(id);
@@ -176,7 +161,7 @@ public class Aluno {
 		return aluno;
 	}
 
-	public static Integer insertAluno(String nome, String dtnasc, String telefone, String sexo, int codclasse,
+	public static void insertAluno(String nome, String dtnasc, String telefone, String sexo, int codclasse,
 			int codclassesugestao, String professor, String alunoespecial, String batismo, String email, String inativo,
 			String obs) throws SQLException, ParseException {
 		// Connection con = Conexao.getConexao();
@@ -187,7 +172,7 @@ public class Aluno {
 
 			// create the mysql insert preparedstatement
 			PreparedStatement preparedStmt = con.prepareStatement(query);
-			preparedStmt.setInt(1, Consulta.PkMax("aluno", "codaluno"));
+			preparedStmt.setInt(1, Consulta.pk("aluno", "codaluno"));
 			preparedStmt.setString(2, nome);
 			preparedStmt.setString(3, Consulta.ConverteData(dtnasc));
 			preparedStmt.setString(4, telefone);
@@ -200,34 +185,15 @@ public class Aluno {
 			preparedStmt.setString(11, email);
 			preparedStmt.setString(12, inativo);
 			preparedStmt.setString(13, obs);
-			//Verifica se já existe
-			//Critério Nome e email iguais
-			//Ou data e email iguais
-			String n1 = Consulta.select(nome, "aluno", "nome", "nome");
-			String e1 = Consulta.select(email, "aluno", "email", "email");
-			String d1 = Consulta.select(email, "aluno", "email", "dtnasc");
-			
-			if (n1.equals(nome) && e1.equals(email)) {
-				System.out.println("Nome e email existentes!");
-			} else if (Consulta.ExibeData(d1).equals(dtnasc) && e1.equals(email)) {
-				System.out.println("Data de nascimento e email existentes!");
-			} else {
-				// execute the preparedstatement
-				preparedStmt.execute();
-				System.out.println("Novo aluno " + nome + " inserido!");
-				if (preparedStmt.getMoreResults() == false) {
-					conf = 1;
-				} else {
-					conf = 0;
-				}
-			}
-			
+
+			// execute the preparedstatement
+			preparedStmt.execute();
+			System.out.println("Novo aluno " + nome + " inserido!");
 			Conexao.closeConexao();
 
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}
-		return conf;
 
 	}
 
@@ -314,15 +280,7 @@ public class Aluno {
 	}
 
 	public static void main(String[] args) throws SQLException, ParseException {
-		//inserir novo aluno----------------------
-		System.out.println(insertAluno("Luiz viannass", "01/01/1900", "900000000", "M", 1, 2, "N", "N", "N", "luiz.vianna@integrajca.com.br", "N",""));
-		//-----------------------------------------
-		//Consulta usando nome com parametro de 0 like %% 1 %- e 2 -%
-		//selectNomeAlunol("Vian", 0);
-		//------------------------------------------------------------
-		//Lista um retorno pelo pk do aluno escolhendo sua coluna como no exemplo.
-		System.out.println(getLista(6).nome);
-		//------------------------------------------------------------
+		// buscaAluno("Mauricio");
 		// System.out.println(selectAluno("teste"));
 		// System.out.println(Consulta.pk("classes", "codclasses"));
 		// PK da tabela
@@ -335,25 +293,53 @@ public class Aluno {
 		// kasdklfjasçldfk asdl fj kasjd flasd kfla sjdf");
 		// System.out.println(selectAluno("teste"));
 		// System.out.println(selectAluno("Ma"));
-		 //System.out.println(Consulta.select("Mauricio Rodrigues", "aluno", "nome",
-		 //"codaluno"));
-		 //System.out.println(Consulta.select("441", "aluno", "codaluno", "nome"));
-		 //Aluno.insertAluno("Bruno Xavier", "24/01/1987", "21934875478", "M", 3, 3,
-		 //"S", "N", "S", "bruno@gmail.com", "N", "sem obs");
-		 //updateAluno("597", "Mauricinho Rodrigues", "26/02/2014", null, null, "2",
-		 //"2", "S", null, null, "S", "S", "agora tem obs");
-		 //updateAluno("Maumau", "28/03/1987", "21980317641", "M", "2", "1", "n", "n",
-		 //"n", "n", "n", "n", "441");
-		 //System.out.println(Consulta.select("441", "aluno", "codaluno", "nome"));
-		 //System.out.println(Consulta.select("597", "aluno", "codaluno", "obs"));
+		// System.out.println(Consulta.select("Mauricio Rodrigues", "aluno", "nome",
+		// "codaluno"));
+		// System.out.println(Consulta.select("441", "aluno", "codaluno", "nome"));
+		// Aluno.insertAluno("Bruno Xavier", "24/01/1987", "21934875478", "M", 3, 3,
+		// "S", "N", "S", "bruno@gmail.com", "N", "sem obs");
+		// updateAluno("597", "Mauricinho Rodrigues", "26/02/2014", null, null, "2",
+		// "2", "S", null, null, "S", "S", "agora tem obs");
+		// updateAluno("Maumau", "28/03/1987", "21980317641", "M", "2", "1", "n", "n",
+		// "n", "n", "n", "n", "441");
+		// System.out.println(Consulta.select("441", "aluno", "codaluno", "nome"));
+		// System.out.println(Consulta.select("597", "aluno", "codaluno", "obs"));
 
-		 //List<Aluno> teste = getLista(1);
-		 //List<Aluno> teste = getLista(1);
-		 //Aluno a1 = new Aluno();
-		 //System.out.println(getLista(441).toString());
-		
-		 //System.out.println(teste.);
+		// List<Aluno> teste = getLista(1);
+		// List<Aluno> teste = getLista(1);
+		// Aluno a1 = new Aluno();
+		// System.out.println(getLista(441).toString());
+		Aluno a = getLista(1);
+		System.out.println(a.getNome());
+		// System.out.println(teste.);
 
 	}
+
+	// private transient JornadaVO jornadaVO = null;
+	// private transient MensagemVO mensagemVO = null;
+	// public int getCodigoJornada() {
+	// if (jornadaVO == null) {
+	// return codigoJornada;
+	// } else {
+	// return jornadaVO.getCodigo();
+	// }
+	// }
+	/*
+	 * public void setCodigoJornada(int codigoJornada) { if (jornadaVO == null) {
+	 * this.codigoJornada = codigoJornada; } else { throw new
+	 * RuntimeException("Objeto Jornada existente"); } }
+	 */
+	/*
+	 * public int getCodigoMensagem() { if (mensagemVO == null) { return
+	 * codigoMensagem; } else { return mensagemVO.getCodigo(); } }
+	 */
+	/*
+	 * public void setCodigoMensagem(int codigoMensagem) { if (mensagemVO == null) {
+	 * this.codigoMensagem = codigoMensagem; } else { throw new
+	 * RuntimeException("Objeto Mensagem existente"); } }
+	 */
+	/*
+	 * public int getEmpresa() { return empresa; }
+	 */
 
 }
